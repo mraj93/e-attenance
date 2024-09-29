@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_12sdp"
         android:layout_marginTop="@dimen/_20sdp"
-        android:fontFamily="@font/poppins_bold"
+        android:fontFamily="@font/poppins_semi_bold"
         android:text="Create account"
         android:textColor="@color/colorPrimary"
         android:textSize="@dimen/_22sdp"

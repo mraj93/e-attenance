@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
-    android:background="@color/white"
     android:layout_height="match_parent"
-    tools:context=".ui.login.SplashActivity">
+    android:background="@color/white"
+    tools:context=".ui.SplashActivity">
 
     <ImageView
         android:id="@+id/ivImage"
@@ -22,9 +22,9 @@
         android:layout_marginStart="@dimen/_12sdp"
         android:layout_marginTop="@dimen/_20sdp"
         android:fontFamily="@font/poppins_bold"
-        android:text="Let’s get started"
+        android:text="Let’s \nget started"
         android:textColor="@color/colorPrimary"
-        android:textSize="@dimen/_25sdp"
+        android:textSize="@dimen/_22sdp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ivImage" />
 
@@ -40,5 +40,41 @@
         android:textSize="@dimen/_13sdp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/bLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_12sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:backgroundTint="@color/colorYellow"
+        android:fontFamily="@font/poppins_semi_bold"
+        android:paddingVertical="@dimen/_8sdp"
+        android:text="Log in"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/_13sdp"
+        app:cornerRadius="@dimen/_10sdp"
+        app:layout_constraintBottom_toTopOf="@+id/btnSignUp"
+        app:rippleColor="@color/white" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnSignUp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_12sdp"
+        android:layout_marginBottom="@dimen/_20sdp"
+        android:backgroundTint="@color/colorPrimary"
+        android:fontFamily="@font/poppins_semi_bold"
+        android:paddingVertical="@dimen/_8sdp"
+
+        android:text="Sign up"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_13sdp"
+        app:cornerRadius="@dimen/_10sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:rippleColor="@color/white"
+        tools:layout_editor_absoluteX="16dp" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

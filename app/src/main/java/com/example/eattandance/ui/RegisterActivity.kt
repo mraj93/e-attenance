@@ -1,14 +1,9 @@
-package com.example.eattandance
+package com.example.eattandance.ui
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.example.eattandance.databinding.ActivityLoginBinding
 import com.example.eattandance.databinding.ActivityRegisterBinding
-import com.example.eattandance.ui.login.LoginActivity
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterBinding
