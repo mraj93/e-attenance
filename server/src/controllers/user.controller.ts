@@ -7,6 +7,7 @@ import ejs from 'ejs'
 import jwt, {JwtPayload, Secret} from 'jsonwebtoken'
 import path from 'path'
 import UserModels from '../models/user.models'
+import WorkerModel from "../models/worker.model";
 import {
     accessTokenOptions,
     refreshTokenOptions,
@@ -176,41 +177,53 @@ export const loginUser = async (
     res: Response,
     next: NextFunction,
 ) => {
+    let user
+    let accessToken
+
     try {
-        const {email, password, isContractor, isSuperVisor} = req.body as ILoginRequest
+        const {email, password, isContractor, isSupervisor} = req.body as ILoginRequest
         if (!email || !password) {
-            return next(
-                res.status(404)
-                    .json(
-                        new ErrorHandler('Please enter correct email and password', 400),
-                    ),
-            )
+            return next(new ErrorHandler('Please enter correct email or password', 400))
         }
-        const user = await UserModels.findOne({email}).select('+password')
-        if (!user) {
-            return next(new ErrorHandler('Invalid email or password', 400))
+        if (!isContractor && !isSupervisor) {
+            return next(new ErrorHandler('please provide user role', 400))
         }
-        const isPasswordMatch = await user.comparePassword(password)
-        if (!isPasswordMatch) {
-            return next(new ErrorHandler('Invalid email or password', 404))
+
+        if (isContractor) {
+            user = await UserModels.findOne({email: email}).select('+password')
+            if (!user) {
+                return next(new ErrorHandler('Invalid email or password', 400))
+            }
+            const isPasswordMatch = await user.comparePassword(password)
+            if (!isPasswordMatch) {
+                return next(new ErrorHandler('Invalid email or password', 404))
+            }
+            console.log(`isPasswordMatch: ${isPasswordMatch}`)
+            accessToken = await sendToken(user, res)
+        } else if (isSupervisor) {
+            console.log(req.body)
+
+            user = await WorkerModel.findOne({email}).select(`+password`)
+            console.log(user)
+            if (!user) {
+                return next(new ErrorHandler('Invalid email or password', 400))
+            }
+            const isPasswordMatch = await user.comparePassword(password)
+            if (!isPasswordMatch) {
+                return next(new ErrorHandler('Invalid email or password', 404))
+            }
+            console.log(`isPasswordMatch:`, isPasswordMatch)
+            accessToken = await sendToken(user, res)
         }
-        console.log(`isPasswordMatch: ${isPasswordMatch}`)
-        const accessToken = await sendToken(user, res)
-        const userRole = {
-            isContractor: isContractor,
-            isSupervisor: isSuperVisor,
-        }
-        const data = {userRole}
+
         res.status(200).json({
             success: true,
             user,
-            accessToken,
-            data
+            accessToken
         })
+
         console.log(`user details`, user)
-        // await sendToken(user, 200, res)
     } catch (err: any) {
-        // return next(res.status(404).json(new ErrorHandler(err)))
         return next(new ErrorHandler(err, 404))
     }
 }

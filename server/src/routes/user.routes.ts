@@ -9,8 +9,6 @@ userRouter.post('/active-user', activateUser)
 userRouter.post('/login', loginUser)
 userRouter.get('/logout', isAuthenticated, logoutUser)
 
-userRouter.post('/create-supervisors', isContractor)
-
 // userRouter.get('/refresh', updateAccessToken)
 // userRouter.get('/me', isAuthenticated, getUserInfo)
 // userRouter.post('/social-auth', getSocialAuth)

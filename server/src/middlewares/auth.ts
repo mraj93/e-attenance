@@ -76,11 +76,12 @@ export const isAuthenticated = catchAsyncErrors(
 //   )
 // }
 
-export const isContractor = async (req: Request, res: Response, next: NextFunction) => {
+export const isContractor = catchAsyncErrors(async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const access_token = req.cookies.access_token
+        let accessToken: any;
+        accessToken = req.cookies.access_token;
         const decoded: string | JwtPayload = jwt.verify(
-            access_token,
+            accessToken,
             process.env.ACCESS_TOKEN as string,
         ) as JwtPayload
         if (!decoded || typeof decoded === 'string' || !decoded.id) {
@@ -88,8 +89,36 @@ export const isContractor = async (req: Request, res: Response, next: NextFuncti
         }
         // const user: string | null = await redisClient.get(decoded.id)
         const user = await UserModels.findById(decoded.id);
-        console.log(`user is:`, user)
+        if (user.role === 'contractor') {
+            return next();
+        } else {
+            return next(new ErrorHandler('You do not have permission to perform this action', 403));
+        }
     } catch (err: any) {
         console.error(`error`, err)
+        return undefined
     }
-}
+})
+
+export const isSuperVisor = catchAsyncErrors(async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const accessToken = req.cookies.access_token
+        const decoded: string | JwtPayload = jwt.verify(
+            accessToken,
+            process.env.ACCESS_TOKEN as string,
+        ) as JwtPayload
+        if (!decoded || typeof decoded === 'string' || !decoded.id) {
+            return next(new ErrorHandler('access token is not valid', 400))
+        }
+        // const user: string | null = await redisClient.get(decoded.id)
+        const user = await UserModels.findById(decoded.id);
+        if (user.role === 'supervisor') {
+            return next();
+        } else {
+            return next(new ErrorHandler('You do not have permission to perform this action', 403));
+        }
+    } catch (err: any) {
+        console.error(`error:`, err)
+        return undefined
+    }
+})
